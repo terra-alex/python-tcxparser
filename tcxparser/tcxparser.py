@@ -16,6 +16,20 @@ class TCXParser:
         self.root = tree.getroot()
         self.activity = self.root.Activities.Activity
 
+    def trackpoint_values_in_dict(self):
+        return [
+            {
+                "hr_bpm": int(tp.HeartRateBpm.Value) if hasattr(tp, "HeartRateBpm") else None,
+                "altitude_meters": float(tp.AltitudeMeters.text) if hasattr(tp, "AltitudeMeters") else None,
+                "lat_lng_position": (float(tp.Position.LatitudeDegrees.text), float(tp.Position.LongitudeDegrees.text)) if hasattr(tp, "Position") else None,
+                "distance_meters": float(tp.DistanceMeters.text) if hasattr(tp, "DistanceMeters") else None,
+                "timestamp": tp.Time.text.replace("Z", "+00:00") if hasattr(tp, "Time") else None,
+                "cadence": float(tp.Cadence.text) if hasattr(tp, "Cadence") else None,
+            } for tp in self.root.findall(
+                ".//ns:Trackpoint", namespaces={"ns": namespace}
+            )
+        ]
+
     def hr_values(self):
         return [
             int(x.text)
@@ -28,7 +42,7 @@ class TCXParser:
         return [
             float(x.text)
             for x in self.root.xpath(
-                "//ns:AltitudeMeters", namespaces={"ns": namespace}
+                "//ns:Trackpoint/ns:AltitudeMeters", namespaces={"ns": namespace}
             )
         ]
 
