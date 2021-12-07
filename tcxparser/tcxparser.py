@@ -41,13 +41,15 @@ class TCXParser:
         ]
 
     def distance_values(self):
-        return self.root.findall(
-            ".//ns:Trackpoint/ns:DistanceMeters", namespaces={"ns": namespace}
-        )
+        return [
+            float(x.text) for x in self.root.findall(
+                ".//ns:Trackpoint/ns:DistanceMeters", namespaces={"ns": namespace}
+            )
+        ]
 
     def time_values(self):
         return [
-            x.text for x in self.root.xpath("//ns:Time", namespaces={"ns": namespace})
+            x.text.replace("Z", "+00:00") for x in self.root.xpath("//ns:Time", namespaces={"ns": namespace})
         ]
 
     def time_objects(self):
@@ -78,7 +80,7 @@ class TCXParser:
 
     def cadence_values(self):
         return [
-            int(x.text)
+            float(x.text)
             for x in self.root.xpath("//ns:Cadence", namespaces={"ns": namespace})
         ]
 
