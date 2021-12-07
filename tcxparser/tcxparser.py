@@ -21,7 +21,7 @@ class TCXParser:
             {
                 "hr_bpm": int(tp.HeartRateBpm.Value) if hasattr(tp, "HeartRateBpm") else None,
                 "altitude_meters": float(tp.AltitudeMeters.text) if hasattr(tp, "AltitudeMeters") else None,
-                "lat_lng_position": (float(tp.Position.LatitudeDegrees.text), float(tp.Position.LongitudeDegrees.text)) if hasattr(tp, "Position") else None,
+                "lat_lng_position": [float(tp.Position.LatitudeDegrees.text), float(tp.Position.LongitudeDegrees.text)] if hasattr(tp, "Position") else None,
                 "distance_meters": float(tp.DistanceMeters.text) if hasattr(tp, "DistanceMeters") else None,
                 "timestamp": tp.Time.text.replace("Z", "+00:00") if hasattr(tp, "Time") else None,
                 "cadence": float(tp.Cadence.text) if hasattr(tp, "Cadence") else None,
